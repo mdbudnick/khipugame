@@ -184,12 +184,12 @@ EndGameState.create = function () {
 	//buttonFace = this.game.add.button(600, 240, 'button3', openFace, this);
 };
 /////////////////
-//function openInsta() {
- //window.open("https://www.instagram.com/kuychiproject/", "_blank")
-    //}
-//function openFace() {
- //window.open("https://www.facebook.com/Kuychi-435800183533124/", "_blank")
-    //}	
+function openInsta() {
+ window.open("https://www.instagram.com/kuychiproject/", "_blank")
+    }
+function openFace() {
+ window.open("https://www.facebook.com/Kuychi-435800183533124/", "_blank")
+    }	
 
 function restartGame() {
 	//this.game.state.add('main', MainMenuState);
