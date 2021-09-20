@@ -185,11 +185,11 @@ EndGameState.create = function () {
 };
 /////////////////
 //function openInsta() {
- window.open("https://www.instagram.com/kuychiproject/", "_blank")
-    }
+ //window.open("https://www.instagram.com/kuychiproject/", "_blank")
+    //}
 //function openFace() {
- window.open("https://www.facebook.com/Kuychi-435800183533124/", "_blank")
-    }	
+ //window.open("https://www.facebook.com/Kuychi-435800183533124/", "_blank")
+    //}	
 
 function restartGame() {
 	//this.game.state.add('main', MainMenuState);
