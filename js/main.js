@@ -164,8 +164,8 @@ EndGameState.preload = function () {
 };
 var buttonWeb;
 var buttonRestart;
-//var buttonInsta;
-//var buttonFace;
+var buttonInsta;
+var buttonFace;
 
 EndGameState.create = function () {
     // create sound entities
