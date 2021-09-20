@@ -470,7 +470,7 @@ PlayState.preload = function () {
     this.game.load.audio('sfx:key', 'audio/key.wav');
     this.game.load.audio('sfx:door', 'audio/door.wav');
 	
-	//this.game.load.audio('sfx:bgm', ['audio/bgm.mp3', 'audio/bgm.ogg']);
+	this.game.load.audio('sfx:bgm', ['audio/bgm.mp3', 'audio/bgm.ogg']);
 };
 
 PlayState.create = function () {
@@ -483,7 +483,7 @@ PlayState.create = function () {
         door: this.game.add.audio('sfx:door'),
 		bgm: this.game.add.audio('sfx:bgm')
     };
-this.sfx.bgm.loopFull();
+//this.sfx.bgm.loopFull();
     // create level
     this.game.add.image(0, 0, 'background');
     this._loadLevel(this.game.cache.getJSON(`level:${this.level}`));
