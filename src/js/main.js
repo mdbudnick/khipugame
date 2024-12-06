@@ -20,22 +20,22 @@ EndGameState.init = function (data) {
     }, this);
 };
 EndGameState.preload = function () {
-    this.game.load.json('start0', 'data/start0.json');
-	this.game.load.image('endgame', 'images/endgame.jpg');
-	this.game.load.image('ground', 'images/ground.png');
+    this.khipu.game.load.json('start0', 'src/data/start0.json');
+	this.khipu.game.load.image('endgame', 'src/assets/images/endgame.jpg');
+	this.khipu.game.load.image('ground', 'src/assets/images/ground.png');
     
 	/////////////////////////
 	
-	this.game.load.image('button', 'images/websitelogo1.png');
-	this.game.load.image('button1', 'images/restarttile.png');
-	//this.game.load.image('button2', 'images/instagramlogo.png');
-	//this.game.load.image('button3', 'images/facebooklogo.png');
+	this.khipu.game.load.image('button', 'src/assets/images/websitelogo1.png');
+	this.khipu.game.load.image('button1', 'src/assets/images/restarttile.png');
+	//this.khipu.game.load.image('button2', 'src/assets/images/instagramlogo.png');
+	//this.khipu.game.load.image('button3', 'src/assets/images/facebooklogo.png');
     
     
-    this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
+    this.khipu.game.load.spritesheet('hero', 'src/assets/images/hero.png', 36, 42);
     
-    this.game.load.audio('sfx:jump', 'audio/jump.wav');
-    this.game.load.audio('sfx:platform', 'audio/coin.wav');
+    this.khipu.game.load.audio('sfx:jump', 'src/assets/audio/jump.wav');
+    this.khipu.game.load.audio('sfx:platform', 'src/assets/audio/coin.wav');
 };
 var buttonWeb;
 var buttonRestart;
@@ -171,20 +171,20 @@ MainMenuState.init = function (data) {
 };
 
 MainMenuState.preload = function () {
-    this.game.load.json('start0', 'data/start0.json');
-	this.game.load.image('startgame', 'images/startgame.jpg');
-	this.game.load.image('ground', 'images/ground.png');
+    this.khipu.game.load.json('start0', 'src/data/start0.json');
+	this.khipu.game.load.image('startgame', 'src/assets/images/startgame.jpg');
+	this.khipu.game.load.image('ground', 'src/assets/images/ground.png');
 	//////////////////////////////
-    this.game.load.image('button', 'images/websitelogo1.png');
-    this.game.load.image('grass:6x1', 'images/starttile.png');
+    this.khipu.game.load.image('button', 'src/assets/images/websitelogo1.png');
+    this.khipu.game.load.image('grass:6x1', 'src/assets/images/starttile.png');
 	
-	this.game.load.image('button2', 'images/instagramlogo.png');
-	this.game.load.image('button3', 'images/facebooklogo.png');
+	this.khipu.game.load.image('button2', 'src/assets/images/instagramlogo.png');
+	this.khipu.game.load.image('button3', 'src/assets/images/facebooklogo.png');
 	
-    this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
+    this.khipu.game.load.spritesheet('hero', 'src/assets/images/hero.png', 36, 42);
     
-    this.game.load.audio('sfx:jump', 'audio/jump.wav');
-    this.game.load.audio('sfx:platform', 'audio/coin.wav');
+    this.khipu.game.load.audio('sfx:jump', 'src/assets/audio/jump.wav');
+    this.khipu.game.load.audio('sfx:platform', 'src/assets/audio/coin.wav');
 };
 /////////////////////
 var button;
@@ -307,45 +307,45 @@ PlayState.init = function (data) {
 };
 
 PlayState.preload = function () {
-    this.game.load.json('level:0', 'data/level00.json');
-    this.game.load.json('level:1', 'data/level01.json');
-	this.game.load.json('level:2', 'data/level02.json');
-	this.game.load.json('level:3', 'data/level03.json');
+    this.khipu.game.load.json('level:0', 'src/data/level00.json');
+    this.khipu.game.load.json('level:1', 'src/data/level01.json');
+	this.khipu.game.load.json('level:2', 'src/data/level02.json');
+	this.khipu.game.load.json('level:3', 'src/data/level03.json');
 
-    this.game.load.image('font:numbers', 'images/numbers.png');
+    this.khipu.game.load.image('font:numbers', 'src/assets/images/numbers.png');
 
-    this.game.load.image('background', 'images/background.png');
+    this.khipu.game.load.image('background', 'src/assets/images/background.png');
 	
-	this.game.load.image('startgame', 'images/startgame.png');
-	this.game.load.image('endgame', 'images/endgame.png');
+	this.khipu.game.load.image('startgame', 'src/assets/images/startgame.png');
+	this.khipu.game.load.image('endgame', 'src/assets/images/endgame.png');
 	
-    this.game.load.image('ground', 'images/ground.png');
-    this.game.load.image('grass:8x1', 'images/grass_8x1.png');
-    this.game.load.image('grass:6x1', 'images/grass_6x1.png');
-    this.game.load.image('grass:4x1', 'images/grass_4x1.png');
-    this.game.load.image('grass:2x1', 'images/grass_2x1.png');
-    this.game.load.image('grass:1x1', 'images/grass_1x1.png');
-    this.game.load.image('invisible-wall', 'images/invisible_wall.png');
-    this.game.load.image('icon:coin', 'images/coin_icon.png');
-    //this.game.load.image('key', 'images/key.png');
-	//this.game.load.image('newword', 'quipu80.png');
+    this.khipu.game.load.image('ground', 'src/assets/images/ground.png');
+    this.khipu.game.load.image('grass:8x1', 'src/assets/images/grass_8x1.png');
+    this.khipu.game.load.image('grass:6x1', 'src/assets/images/grass_6x1.png');
+    this.khipu.game.load.image('grass:4x1', 'src/assets/images/grass_4x1.png');
+    this.khipu.game.load.image('grass:2x1', 'src/assets/images/grass_2x1.png');
+    this.khipu.game.load.image('grass:1x1', 'src/assets/images/grass_1x1.png');
+    this.khipu.game.load.image('invisible-wall', 'src/assets/images/invisible_wall.png');
+    this.khipu.game.load.image('icon:coin', 'src/assets/images/coin_icon.png');
+    //this.khipu.game.load.image('key', 'src/assets/images/key.png');
+	//this.khipu.game.load.image('newword', 'quipu80.png');
 	
-	this.game.load.spritesheet('key', 'images/key01.png', 60, 30);
-	this.game.load.spritesheet('badkey', 'images/badkey01.png', 60, 30);
+	this.khipu.game.load.spritesheet('key', 'src/assets/images/key01.png', 60, 30);
+	this.khipu.game.load.spritesheet('badkey', 'src/assets/images/badkey01.png', 60, 30);
 
-    this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
-    this.game.load.spritesheet('spider', 'images/spider.png', 43, 32);
-    this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
-    this.game.load.spritesheet('door', 'images/door.png', 42, 66);
-    this.game.load.spritesheet('icon:key', 'images/key_icon.png', 34, 30);
+    this.khipu.game.load.spritesheet('coin', 'src/assets/images/coin_animated.png', 22, 22);
+    this.khipu.game.load.spritesheet('spider', 'src/assets/images/spider.png', 43, 32);
+    this.khipu.game.load.spritesheet('hero', 'src/assets/images/hero.png', 36, 42);
+    this.khipu.game.load.spritesheet('door', 'src/assets/images/door.png', 42, 66);
+    this.khipu.game.load.spritesheet('icon:key', 'src/assets/images/key_icon.png', 34, 30);
 
-    this.game.load.audio('sfx:jump', 'audio/jump.wav');
-    this.game.load.audio('sfx:coin', 'audio/coin.wav');
-    this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
-    this.game.load.audio('sfx:key', 'audio/key.wav');
-    this.game.load.audio('sfx:door', 'audio/door.wav');
+    this.khipu.game.load.audio('sfx:jump', 'src/assets/audio/jump.wav');
+    this.khipu.game.load.audio('sfx:coin', 'src/assets/audio/coin.wav');
+    this.khipu.game.load.audio('sfx:stomp', 'src/assets/audio/stomp.wav');
+    this.khipu.game.load.audio('sfx:key', 'src/assets/audio/key.wav');
+    this.khipu.game.load.audio('sfx:door', 'src/assets/audio/door.wav');
 	
-	this.game.load.audio('sfx:bgm', ['audio/bgm.mp3', 'audio/bgm.ogg']);
+	this.khipu.game.load.audio('sfx:bgm', ['src/assets/audio/bgm.mp3', 'src/assets/audio/bgm.ogg']);
 };
 
 PlayState.create = function () {
