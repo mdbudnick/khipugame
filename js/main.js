@@ -6,7 +6,6 @@
 // hero sprite
 //
 function Hero(game, x, y) {
-    console.log(this)
     Phaser.Sprite.call(this, game, x, y, 'hero');
     this.anchor.set(0.5, 0.5);
 
@@ -756,7 +755,6 @@ PlayState._createHud = function () {
 // =============================================================================
 
 window.onload = function () {
-    this.khipu = {}
     let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
 	game.state.add('main', MainMenuState);
 	game.state.start('main', true, false, 'start0');
