@@ -1,12 +1,3 @@
-// =============================================================================
-// entry point
-// =============================================================================
-window.onload = function () {
-    let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
-	game.state.add('main', MainMenuState);
-	game.state.start('main', true, false, 'start0');
-};
-
 function Hero(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'hero');
     this.anchor.set(0.5, 0.5);
@@ -689,4 +680,13 @@ PlayState._createHud = function () {
     this.hud.add(keyScoreImg);
 	
     this.hud.position.set(10, 10);	
+};
+
+// =============================================================================
+// entry point
+// =============================================================================
+window.onload = function () {
+    let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
+	game.state.add('main', MainMenuState);
+	game.state.start('main', true, false, 'start0');
 };
