@@ -20,11 +20,9 @@ PlayState.init = function (data) {
         }
     }, this);
 
-    
     this.hasKey = 0;
     this.level = (data.level || 0) % LEVEL_COUNT;
-	console.log(this.level);
-	
+	// console.log(this.level);	
 };
 
 PlayState.preload = function () {
@@ -48,8 +46,6 @@ PlayState.preload = function () {
     this.game.load.image('grass:1x1', 'images/grass_1x1.png');
     this.game.load.image('invisible-wall', 'images/invisible_wall.png');
     this.game.load.image('icon:coin', 'images/coin_icon.png');
-    //this.game.load.image('key', 'images/key.png');
-	//this.game.load.image('newword', 'quipu80.png');
 	
 	this.game.load.spritesheet('key', 'images/key01.png', 60, 30);
 	this.game.load.spritesheet('badkey', 'images/badkey01.png', 60, 30);
@@ -65,7 +61,6 @@ PlayState.preload = function () {
     this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
     this.game.load.audio('sfx:key', 'audio/key.wav');
     this.game.load.audio('sfx:door', 'audio/door.wav');
-	
 	this.game.load.audio('sfx:bgm', ['audio/bgm.mp3', 'audio/bgm.ogg']);
 };
 
@@ -96,11 +91,12 @@ PlayState.update = function () {
 	
 	this.keyFont.text = `x${this.hasKey}`;
 	this.keyNum = this.game.cache.getJSON(`level:${this.level}`).keyz.length;
-    //this.keyIcon.frame = this.hasKey === 3 ? 1 : 0;
 	this.keyIcon.frame = this.hasKey === this.keyNum ? 1 : 0;
+
 	if (this.hasKey === this.keyNum) {
 		this.door.frame = 1;
 	}
+
 	this.coinsInLevel = this.game.cache.getJSON(`level:${this.level}`).coins.length;
 	if (this.coinPickupCount === this.coinsInLevel){
 		this._revealClues();
@@ -110,10 +106,11 @@ PlayState.update = function () {
 PlayState.shutdown = function () {
 	this.sfx.bgm.stop();
 };
-PlayState._revealClues = function () {
-	
+
+PlayState._revealClues = function () {	
 	this.badkeyz.destroy();
 };
+
 PlayState._handleCollisions = function () {
     this.game.physics.arcade.collide(this.spiders, this.platforms);
     this.game.physics.arcade.collide(this.spiders, this.enemyWalls);
@@ -136,15 +133,12 @@ PlayState._handleCollisions = function () {
         }, this);
 };
 
-
 PlayState._handleInput = function () {
     if (this.keys.left.isDown) { // move hero left
         this.hero.move(-1);
-    }
-    else if (this.keys.right.isDown) { // move hero right
+    } else if (this.keys.right.isDown) { // move hero right
         this.hero.move(1);
-    }
-    else { // stop
+    } else { // stop
         this.hero.move(0);
     }
 };
@@ -159,8 +153,6 @@ PlayState._loadLevel = function (data) {
     this.enemyWalls.visible = false;
 	
 	this.keyz = this.game.add.group();
-	//console.log(this.keyz.length);
-	
 	this.badkeyz = this.game.add.group();
 
     // spawn all platforms
@@ -173,16 +165,10 @@ PlayState._loadLevel = function (data) {
     //this._spawnKey(data.key.x, data.key.y, data.key.frame);
 	data.keyz.forEach(this._spawnKey, this);
 	
-	//data.keyz.forEach(function (deco) {
-      //  this.keyz.add(
-     //       this.game.add.image(deco.x, deco.y, 'key', deco.frame));
-  //  }, this);
-	
 	data.badkeyz.forEach(this._spawnBadKey, this);
     // enable gravity
     const GRAVITY = 1200;
     this.game.physics.arcade.gravity.y = GRAVITY;
-	
 };
 
 PlayState._spawnPlatform = function (platform) {
@@ -213,7 +199,6 @@ PlayState._spawnCharacters = function (data) {
         let sprite = new Spider(this.game, spider.x, spider.y);
         this.spiders.add(sprite);
     }, this);
-
     // spawn hero
     this.hero = new Hero(this.game, data.hero.x, data.hero.y);
     this.game.add.existing(this.hero);
@@ -244,13 +229,7 @@ PlayState._spawnKey = function (key) {
     this.game.physics.enable(sprite);
     sprite.body.allowGravity = false;
     sprite.body.immovable = true;
-
 	sprite.anchor.set(0.5, 0.5);
-  /*  this.key = this.bgDecoration.create(x, y, 'key');
-    this.key.anchor.set(0.5, 0.5);
-    // enable physics to detect collisions, so the hero can pick the key up
-    this.game.physics.enable(this.key);
-    this.key.body.allowGravity = false;*/
     // add a small 'up & down' animation via a tween
     this.keyz.y -= 3;
     this.game.add.tween(this.keyz)
@@ -278,7 +257,6 @@ PlayState._spawnBadKey = function (bkey) {
         .loop()
         .start();
 };
-
 
 PlayState._onHeroVsCoin = function (hero, coin) {
     this.sfx.coin.play();
@@ -342,6 +320,5 @@ PlayState._createHud = function () {
     this.hud.add(this.keyIcon);
     this.hud.add(keyScoreImg);
 	
-    this.hud.position.set(10, 10);
-	
+    this.hud.position.set(10, 10);	
 };
