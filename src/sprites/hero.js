@@ -1,4 +1,4 @@
-class Hero extends Phaser.GameObjects.Sprite {
+export class Hero extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, "hero")
         scene.add.existing(this);
