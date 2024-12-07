@@ -1,0 +1,22 @@
+{
+  "name": "khipugame",
+  "version": "1.0.0",
+  "description": "Phaser platformed starring Kuychi",
+  "main": "src/js/main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuychi/khipugame.git"
+  },
+  "author": "Cecilia De La Fuente Chavez and Michael Budnick",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kuychi/khipugame/issues"
+  },
+  "homepage": "https://github.com/kuychi/khipugame#readme"
+}
