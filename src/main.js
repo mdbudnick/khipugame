@@ -1,5 +1,20 @@
-window.onload = function () {
-    let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
-	game.state.add('main', MainMenuState);
-	game.state.start('main', true, false, 'start0');
-};
+const config = {
+	width: 960,
+	height: 600,
+	scale: {
+	  mode: Phaser.Scale.FIT,
+	  autoCenter: Phaser.Scale.CENTER_BOTH,
+	},
+	autoRound: false,
+	parent: "game-container",
+	physics: {
+	  default: "arcade",
+	  arcade: {
+		gravity: { y: 1200 },
+		debug: true,
+	  },
+	},
+	scene: [],
+  };
+  
+const game = new Phaser.Game(config);
