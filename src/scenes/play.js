@@ -1,3 +1,5 @@
+import Hero from "../sprites/hero";
+import Spider from "../sprites/spider";
 export default class Play extends Phaser.Scene {
     LEVEL_COUNT = 4;
 
