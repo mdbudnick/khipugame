@@ -2,7 +2,7 @@
   "name": "khipugame",
   "version": "1.0.0",
   "description": "Phaser platformed starring Kuychi",
-  "main": "src/js/main.js",
+  "main": "src/main.js",
   "directories": {
     "lib": "lib"
   },
