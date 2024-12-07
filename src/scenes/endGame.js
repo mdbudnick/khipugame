@@ -1,6 +1,6 @@
-EndGameState = {};
+EndGame = {};
 
-EndGameState.init = function (data) {
+EndGame.init = function (data) {
     this.game.renderer.renderSession.roundPixels = true;
 
     this.keys = this.game.input.keyboard.addKeys({
@@ -16,7 +16,7 @@ EndGameState.init = function (data) {
         }
     }, this);
 };
-EndGameState.preload = function () {
+EndGame.preload = function () {
     this.game.load.json('start0', 'data/start0.json');
 	this.game.load.image('endgame', 'images/endgame.jpg');
 	this.game.load.image('ground', 'images/ground.png');
@@ -35,7 +35,7 @@ var buttonRestart;
 var buttonInsta;
 var buttonFace;
 
-EndGameState.create = function () {
+EndGame.create = function () {
     // create sound entities
     this.sfx = {
         jump: this.game.add.audio('sfx:jump'),
@@ -60,16 +60,16 @@ function restartGame() {
 	this.game.state.start('main', true, false, 'start0');
 }
 
-EndGameState.update = function () {
+EndGame.update = function () {
     this._handleCollisions();
     this._handleInput();
 };
 
-EndGameState._handleCollisions = function () {
+EndGame._handleCollisions = function () {
    this.game.physics.arcade.collide(this.hero, this.platforms);
 };
 
-EndGameState._handleInput = function () {
+EndGame._handleInput = function () {
     if (this.keys.left.isDown) { // move hero left
         this.hero.move(-1);
     } else if (this.keys.right.isDown) { // move hero right
@@ -79,7 +79,7 @@ EndGameState._handleInput = function () {
     }
 };
 
-EndGameState._loadLevel = function (data) {
+EndGame._loadLevel = function (data) {
     // create all the groups/layers that we need
     this.platforms = this.game.add.group();
     // spawn all platforms
@@ -91,7 +91,7 @@ EndGameState._loadLevel = function (data) {
     this.game.physics.arcade.gravity.y = GRAVITY;
 };
 
-EndGameState._spawnPlatform = function (platform) {
+EndGame._spawnPlatform = function (platform) {
     let sprite = this.platforms.create(
         platform.x, platform.y, platform.image);
 
@@ -100,7 +100,7 @@ EndGameState._spawnPlatform = function (platform) {
     sprite.body.immovable = true;
 };
 
-EndGameState._spawnCoin = function (coin) {
+EndGame._spawnCoin = function (coin) {
     let sprite = this.coin.create(
         coin.x, coin.y, coin.image);
 
@@ -109,11 +109,11 @@ EndGameState._spawnCoin = function (coin) {
     sprite.body.immovable = true;
 };
 
-EndGameState._spawnCharacters = function (data) {
+EndGame._spawnCharacters = function (data) {
     // spawn hero
     this.hero = new Hero(this.game, data.hero.x, data.hero.y);
     this.game.add.existing(this.hero);
 };
 
-EndGameState.shutdown = function () {
+EndGame.shutdown = function () {
 };
