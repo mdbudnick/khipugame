@@ -55,6 +55,14 @@ function openWindow() {
     window.open("https://forms.gle/gW5an78GgXbbZtas9", "_blank")
 }
 
+openInsta() {
+    window.open("https://www.instagram.com/kuychiproject/", "_blank")
+}
+
+openFace() {
+    window.open("https://www.facebook.com/Kuychi-435800183533124/", "_blank")
+}
+
 MainMenuState.update = function () {
     this._handleCollisions();
     this._handleInput();
