@@ -26,7 +26,7 @@ export default class EndGame extends Phaser.Scene {
         this.game.load.image('endgame', 'assets/images/endgame.jpg');
         this.game.load.image('ground', 'assets/images/ground.png');
         
-        this.game.load.image('button', 'assets/images/websitelogo1.png');
+        this.game.load.image('button', 'assets/images/encuesta.png');
         this.game.load.image('button1', 'assets/images/restarttile.png');
         
         this.game.load.spritesheet('hero', 'assets/images/hero.png', 36, 42);

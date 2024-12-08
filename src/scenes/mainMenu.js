@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Hero from "../sprites/hero";
+import Play from "./play";
 export default class MainMenu extends Phaser.Scene {
     constructor() {
         super({ key: "MainMenu" });
@@ -17,11 +18,11 @@ export default class MainMenu extends Phaser.Scene {
         this.load.image('startgame', 'assets/images/startgame.jpg');
         this.load.image('ground', 'assets/images/ground.png');
     
-        this.load.image('button', 'assets/images/websitelogo1.png');
         this.load.image('grass:6x1', 'assets/images/starttile.png');
         
-        this.load.image('button2', 'assets/images/instagramlogo.png');
-        this.load.image('button3', 'assets/images/facebooklogo.png');
+        this.load.image('encuesta', 'assets/images/encuesta.png');    
+        this.load.image('instagram', 'assets/images/instagramlogo.png');
+        this.load.image('facebook', 'assets/images/facebooklogo.png');
         
         this.load.spritesheet('hero', 'assets/images/hero.png', {
             frameWidth: 36,
@@ -32,7 +33,7 @@ export default class MainMenu extends Phaser.Scene {
         this.load.audio('sfx:coin', 'assets/audio/coin.wav');
     }
     
-    _openWindow() {
+    _openForm() {
         window.open("https://forms.gle/gW5an78GgXbbZtas9", "_blank")
     }
     
@@ -54,10 +55,17 @@ export default class MainMenu extends Phaser.Scene {
         this.add.image(480, 300, 'startgame');
         this._loadLevel(this.cache.json.get('start0'));
     
-        // const button = this.add.button(855, 26, 'button', this._openWindow, this);
-        // button.input.useHandCursor = true;
-        // this.add.button(855, 126, 'button2', this._openInsta, this);
-        // this.add.button(855, 226, 'button3', this._openFace, this);
+        this.add.image(855, 45, 'encuesta')
+        .setInteractive({ useHandCursor: true })
+        .on('pointerdown', this._openForm)
+
+        this.add.image(855, 145, 'instagram')
+        .setInteractive({ useHandCursor: true })
+        .on('pointerdown', this._openInsta);
+
+        this.add.image(855, 245, 'facebook')
+        .setInteractive({ useHandCursor: true })
+        .on('pointerdown', this._openFace);
     }
 
     update() {
@@ -90,7 +98,7 @@ export default class MainMenu extends Phaser.Scene {
         // spawn hero and enemies
         this._spawnCharacters({hero: data.hero});
         this.physics.add.collider(this.hero, this.platforms);
-        this.physics.add.collider(this.hero, this.coins, this._onHeroVsCoin);
+        this.physics.add.collider(this.hero, this.coins, this._onHeroVsCoin, null, this);
     }
     
     _spawnPlatform(platformData) {
@@ -111,10 +119,9 @@ export default class MainMenu extends Phaser.Scene {
     
     _onHeroVsCoin(_hero, coin) {
         this.sfx.coin.play();
-        coin.kill();
+        coin.destroy();
         
-        this.game.scene('play', PlayState);
-        this.game.scene.start('play', true, false, {level: 0});
+        this.scene.start('play');
     }
     
     shutdown() {}

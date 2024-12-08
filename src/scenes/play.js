@@ -4,12 +4,10 @@ export default class Play extends Phaser.Scene {
     LEVEL_COUNT = 4;
 
     constructor() {
-        super({ key: "Play" });
+        super({ key: "play" });
     }
 
     init(data) {
-        this.game.renderer.renderSession.roundPixels = true;
-    
         this.keys = this.game.input.keyboard.addKeys({
             left: Phaser.KeyCode.LEFT,
             right: Phaser.KeyCode.RIGHT,
@@ -27,7 +25,6 @@ export default class Play extends Phaser.Scene {
     
         this.hasKey = 0;
         this.level = (data.level || 0) % LEVEL_COUNT;
-        // console.log(this.level);	
     }
     
     preload() {
