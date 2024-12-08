@@ -1,4 +1,4 @@
-export class Spider extends Phaser.GameObjects.Sprite {
+export default class Spider extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, "spider")
         this.anchor.set(0.5);
