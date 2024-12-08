@@ -51,7 +51,7 @@ export default class MainMenu extends Phaser.Scene {
             platform: this.sound.add('sfx:platform'),
         };
         // create level
-        this.add.image(0, 0, 'startgame');
+        this.add.image(480, 300, 'startgame');
         this._loadLevel(this.cache.json.get('start0'));
     
         const button = this.add.button(855, 26, 'button', this._openWindow, this);
@@ -89,10 +89,10 @@ export default class MainMenu extends Phaser.Scene {
     _loadLevel(data) {
         // create all the groups/layers that we need
         this.platforms = this.add.group();
-        this.coin = this.add.group();
+        this.coins = this.add.group();
         // spawn all platforms
         data.platforms.forEach(this._spawnPlatform, this);
-        data.coin.forEach(this._spawnCoin, this);
+        data.coins.forEach(this._spawnCoin, this);
         // spawn hero and enemies
         this._spawnCharacters({hero: data.hero});
     }
@@ -102,7 +102,7 @@ export default class MainMenu extends Phaser.Scene {
     }
     
     _spawnCoin(coin) {
-        this.coin.create(coin.x, coin.y, coin.image);
+        this.coins.create(coin.x, coin.y, coin.image);
     }
     
     _spawnCharacters(data) {
