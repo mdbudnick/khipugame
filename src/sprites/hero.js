@@ -4,35 +4,36 @@ export default class Hero extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.body.setAllowGravity(true);
-        this.anchor.set(0.5, 0.5);
-        this.game.physics.enable(this);
-        this.body.collideWorldBounds = true;
-
-        this.animations.add('stop', [0]);
-        this.animations.add('run', [1, 2], 8, true); // 8fps looped
-        this.animations.add('jump', [3]);
-        this.animations.add('fall', [4]);
+        this.setOrigin(0.5, 0.5);
+        this.body.setCollideWorldBounds = true;
+        scene.add.existing(this);
+        scene.physics.add.existing(this);
+        this.anims.create({ key: 'stop', frames: [0]})
+        this.anims.create({ key: 'run', frames: [1,2], frameRate: 8, repeat: -1})
+        this.anims.create({ key: 'jump', frames: [3]})
+        this.anims.create({ key: 'fall', frames: [4]})
     }
 
     move(direction) {
         const SPEED = 200;
-        this.body.velocity.x = direction * SPEED;
+        this.body.setVelocityX(direction * SPEED); // Set horizontal velocity
     
-        // update image flipping & animations
+        // Flip sprite based on movement direction
         if (this.body.velocity.x < 0) {
-            this.scale.x = -1;
-        }
-        else if (this.body.velocity.x > 0) {
-            this.scale.x = 1;
+            this.setFlipX(true); // Flip sprite to face left
+        } else if (this.body.velocity.x > 0) {
+            this.setFlipX(false); // Default to facing right
         }
     }
 
     jump() {
         const JUMP_SPEED = 600;
-        let canJump = this.body.touching.down;
+    
+        // Check if the Hero is standing on something
+        let canJump = this.body.blocked.down || this.body.touching.down;
     
         if (canJump) {
-            this.body.velocity.y = -JUMP_SPEED;
+            this.body.setVelocityY(-JUMP_SPEED); // Apply upward velocity
         }
     
         return canJump;

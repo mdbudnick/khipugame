@@ -29,7 +29,7 @@ export default class MainMenu extends Phaser.Scene {
           });
         
         this.load.audio('sfx:jump', 'assets/audio/jump.wav');
-        this.load.audio('sfx:platform', 'assets/audio/coin.wav');
+        this.load.audio('sfx:coin', 'assets/audio/coin.wav');
     }
     
     _openWindow() {
@@ -48,27 +48,21 @@ export default class MainMenu extends Phaser.Scene {
         // create sound entities
         this.sfx = {
             jump: this.sound.add('sfx:jump'),
-            platform: this.sound.add('sfx:platform'),
+            coin: this.sound.add('sfx:coin'),
         };
         // create level
         this.add.image(480, 300, 'startgame');
         this._loadLevel(this.cache.json.get('start0'));
     
-        const button = this.add.button(855, 26, 'button', this._openWindow, this);
-        button.input.useHandCursor = true;
-        this.add.button(855, 126, 'button2', this._openInsta, this);
-        this.add.button(855, 226, 'button3', this._openFace, this);
+        // const button = this.add.button(855, 26, 'button', this._openWindow, this);
+        // button.input.useHandCursor = true;
+        // this.add.button(855, 126, 'button2', this._openInsta, this);
+        // this.add.button(855, 226, 'button3', this._openFace, this);
     }
 
     update() {
-        this._handleCollisions();
         this._handleInput();
     }
-    
-    _handleCollisions() {
-        this.physics.arcade.collide(this.hero, this.platforms);
-        this.physics.arcade.overlap(this.hero, this.coin, this._onHeroVsCoin, null, this);
-    };
     
     _handleInput() {
         if (Phaser.Input.Keyboard.JustDown(this.keys.up)) {
@@ -77,7 +71,7 @@ export default class MainMenu extends Phaser.Scene {
                 this.sfx.jump.play();
             }
         }
-        if (Phaser.Input.Keyboard.JustDown(this.keys.left)) { // move hero left
+        if (this.keys.left.isDown) { // move hero left
             this.hero.move(-1);
         } else if (this.keys.right.isDown) { // move hero right
             this.hero.move(1);
@@ -95,23 +89,29 @@ export default class MainMenu extends Phaser.Scene {
         data.coins.forEach(this._spawnCoin, this);
         // spawn hero and enemies
         this._spawnCharacters({hero: data.hero});
+        this.physics.add.collider(this.hero, this.platforms);
+        this.physics.add.collider(this.hero, this.coins, this._onHeroVsCoin);
     }
     
-    _spawnPlatform(platform) {
-        this.platforms.create(platform.x, platform.y, platform.image);
+    _spawnPlatform(platformData) {
+        let platform = this.platforms.create(platformData.x, platformData.y, platformData.image);
+        platform = this.physics.add.existing(platform)
+        platform.body.setAllowGravity(false);
+        platform.body.setImmovable(true);
     }
     
-    _spawnCoin(coin) {
-        this.coins.create(coin.x, coin.y, coin.image);
+    _spawnCoin(coinData) {
+        let coin = this.coins.create(coinData.x, coinData.y, coinData.image);
+        this.physics.add.existing(coin).body.setAllowGravity(false);
     }
     
     _spawnCharacters(data) {
         this.hero = new Hero(this, data.hero.x, data.hero.y);
     }
     
-    _onHeroVsCoin(_hero, platform) {
-        this.sfx.platform.play();
-        platform.kill();
+    _onHeroVsCoin(_hero, coin) {
+        this.sfx.coin.play();
+        coin.kill();
         
         this.game.scene('play', PlayState);
         this.game.scene.start('play', true, false, {level: 0});
