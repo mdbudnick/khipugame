@@ -14,7 +14,7 @@ export default class MainMenu extends Phaser.Scene {
     }
     
     preload() {
-        this.load.json('start0', 'data/start0.json');
+        this.load.json('start0', 'assets/data/start0.json');
         this.load.image('startgame', 'assets/images/startgame.jpg');
         this.load.image('ground', 'assets/images/ground.png');
     
