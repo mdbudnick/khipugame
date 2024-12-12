@@ -9,10 +9,26 @@ export default class Hero extends Phaser.GameObjects.Sprite {
         this.body.setCollideWorldBounds = true;
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.anims.create({ key: 'stop', frames: [0]})
-        this.anims.create({ key: 'run', frames: [1,2], frameRate: 8, repeat: -1})
-        this.anims.create({ key: 'jump', frames: [3]})
-        this.anims.create({ key: 'fall', frames: [4]})
+        this.anims.create({ key: 'stop', frames: this.anims.generateFrameNumbers('hero', {
+            start: 0,
+            end: 0,
+          })})
+        this.anims.create({ key: 'run', defaultTextureKey: 'hero',
+            frames: [
+              { frame: 1, duration: 100 },
+              { frame: 2, duration: 100 },
+            ], repeat: -1})
+          this.anims.create({ key: 'jump', frames: this.anims.generateFrameNumbers('hero', {
+            frames: [4]
+          })})
+          this.anims.create({ key: 'fall', frames: this.anims.generateFrameNumbers('hero', {
+            frames: [3]
+          })})
+    }
+
+    preUpdate() {
+        super.preUpdate()
+        this.update()
     }
 
     move(direction) {
@@ -46,10 +62,11 @@ export default class Hero extends Phaser.GameObjects.Sprite {
     }
 
     update() {
+        super.update()
         // update sprite animation, if it needs changing
         let animationName = this._getAnimationName();
-        if (this.animations.name !== animationName) {
-            this.animations.play(animationName);
+        if (this.anims.getName() !== animationName) {
+            this.anims.play(animationName);
         }
     }
 
@@ -61,7 +78,7 @@ export default class Hero extends Phaser.GameObjects.Sprite {
             name = 'jump';
         }
         // falling
-        else if (this.body.velocity.y >= 0 && !this.body.touching.down) {
+        else if (this.body.velocity.y > 0 && !this.body.touching.down) {
             name = 'fall';
         }
         else if (this.body.velocity.x !== 0 && this.body.touching.down) {
