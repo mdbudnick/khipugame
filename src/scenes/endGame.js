@@ -22,7 +22,7 @@ export default class EndGame extends Phaser.Scene {
     }
 
     preload() {
-        this.game.load.json('start0', 'data/start0.json');
+        this.game.load.json('start0', 'assets/data/start0.json');
         this.game.load.image('endgame', 'assets/images/endgame.jpg');
         this.game.load.image('ground', 'assets/images/ground.png');
         
