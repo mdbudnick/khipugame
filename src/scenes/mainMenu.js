@@ -115,6 +115,7 @@ export default class MainMenu extends Phaser.Scene {
     
     _spawnCharacters(data) {
         this.hero = new Hero(this, data.hero.x, data.hero.y);
+        this.hero.collider
     }
     
     _onHeroVsCoin(_hero, coin) {
