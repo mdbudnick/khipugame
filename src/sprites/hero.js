@@ -13,11 +13,11 @@ export default class Hero extends Phaser.GameObjects.Sprite {
             start: 0,
             end: 0,
           })})
-        this.anims.create({ key: 'run', defaultTextureKey: 'hero',
-            frames: [
-              { frame: 1 },
-              { frame: 2 },
-            ], frameRate: 8, repeat: -1})
+            this.anims.create({ key: 'run', defaultTextureKey: 'hero',
+                frames: [
+                { frame: 1, duration: 125 },
+                { frame: 2, duration: 125 },
+                ], frameRate: 8, repeat: -1})
           this.anims.create({ key: 'jump', frames: this.anims.generateFrameNumbers('hero', {
             frames: [4]
           })})
