@@ -102,12 +102,11 @@ export default class Play extends Phaser.Scene {
     update() {
         this._handleCollisions();
         this._handleInput();
-    
-        this.coinFont.text = `x${this.coinPickupCount}`;
         
-        this.keyFont.text = `x${this.hasKey}`;
+        this.coinText.setText(`x${this.coinPickupCount}`);
+        this.keyText.setText(`x${this.hasKey}`);
+        
         this.keyNum = this.cache.getJSON(`level:${this.level}`).keyz.length;
-        this.keyIcon.frame = this.hasKey === this.keyNum ? 1 : 0;
     
         if (this.hasKey === this.keyNum) {
             this.door.frame = 1;
@@ -294,27 +293,29 @@ export default class Play extends Phaser.Scene {
     }
     
     _createHud() {
-        const NUMBERS_STR = '0123456789X ';
-        this.coinFont = this.add.retroFont('font:numbers', 20, 26,
-            NUMBERS_STR, 6);
-        
-        let coinIcon = this.make.image(0, 59, 'icon:coin');
-        let coinScoreImg = this.make.image(coinIcon.x + coinIcon.width,
-            coinIcon.y + coinIcon.height / 2, this.coinFont);
-        coinScoreImg.anchor.set(0, 0.5);
-        
-        this.keyFont = this.add.retroFont('font:numbers', 20, 26, NUMBERS_STR, 6);
-        this.keyIcon = this.make.sprite(0, 19, 'icon:key');
-        let keyScoreImg = this.make.image(this.keyIcon.x + coinIcon.width,
-            this.keyIcon.y + this.keyIcon.height / 2, this.keyFont);
-            keyScoreImg.anchor.set(0, 0.5);
-    
-        this.hud = this.add.group();
-        this.hud.add(coinIcon);
-        this.hud.add(coinScoreImg);
-        this.hud.add(this.keyIcon);
-        this.hud.add(keyScoreImg);
-        
-        this.hud.position.set(10, 10);	
+        var numbersFontConfig = {
+            // image
+            image: 'font:numbers',
+            offset: {
+                x: 0,
+                y: 0
+            },
+            // characters
+            width: 20,
+            height: 26,
+            chars: '0123456789X ',
+            charsPerRow: 6,
+            // spacing
+            spacing: {
+                x: 0,
+                y: 0
+            },
+            lineSpacing: 0
+        }
+        this.cache.bitmapFont.add('numbersFont', Phaser.GameObjects.RetroFont.Parse(this, numbersFontConfig));
+        this.coinIcon = this.make.image({ x: 25, y: 27, key: 'icon:coin' });
+        this.coinText = this.add.bitmapText(50, 15, 'numbersFont', 'X0');
+        this.keyIcon = this.make.sprite({ x: 25, y: 75, key: 'icon:key' });
+        this.keyText = this.add.bitmapText(50, 60, 'numbersFont', 'X0');
     }
 }
