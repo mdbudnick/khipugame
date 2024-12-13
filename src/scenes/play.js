@@ -1,3 +1,4 @@
+import Coin from "../sprites/coin";
 import Hero from "../sprites/hero";
 import Spider from "../sprites/spider";
 export default class Play extends Phaser.Scene {
@@ -29,9 +30,6 @@ export default class Play extends Phaser.Scene {
         this.load.image('font:numbers', 'assets/images/numbers.png');
     
         this.load.image('background', 'assets/images/background.png');
-        
-        this.load.image('startgame', 'assets/images/startgame.png');
-        this.load.image('endgame', 'assets/images/endgame.jpg');
         
         this.load.image('ground', 'assets/images/ground.png');
         this.load.image('grass:8x1', 'assets/images/grass_8x1.png');
@@ -107,14 +105,14 @@ export default class Play extends Phaser.Scene {
         this.coinFont.text = `x${this.coinPickupCount}`;
         
         this.keyFont.text = `x${this.hasKey}`;
-        this.keyNum = this.game.cache.getJSON(`level:${this.level}`).keyz.length;
+        this.keyNum = this.cache.getJSON(`level:${this.level}`).keyz.length;
         this.keyIcon.frame = this.hasKey === this.keyNum ? 1 : 0;
     
         if (this.hasKey === this.keyNum) {
             this.door.frame = 1;
         }
     
-        this.coinsInLevel = this.game.cache.getJSON(`level:${this.level}`).coins.length;
+        this.coinsInLevel = this.cache.getJSON(`level:${this.level}`).coins.length;
         if (this.coinPickupCount === this.coinsInLevel){
             this._revealClues();
         };   
@@ -129,21 +127,21 @@ export default class Play extends Phaser.Scene {
     }
     
     _handleCollisions() {
-        this.game.physics.arcade.collide(this.spiders, this.platforms);
-        this.game.physics.arcade.collide(this.spiders, this.enemyWalls);
-        this.game.physics.arcade.collide(this.hero, this.platforms);
+        this.physics.arcade.collide(this.spiders, this.platforms);
+        this.physics.arcade.collide(this.spiders, this.enemyWalls);
+        this.physics.arcade.collide(this.hero, this.platforms);
     
-        this.game.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin,
+        this.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin,
             null, this);
-        this.game.physics.arcade.overlap(this.hero, this.spiders,
+        this.physics.arcade.overlap(this.hero, this.spiders,
             this._onHeroVsEnemy, null, this);
-        this.game.physics.arcade.overlap(this.hero, this.keyz, this._onHeroVsKey,
+        this.physics.arcade.overlap(this.hero, this.keyz, this._onHeroVsKey,
             null, this);
             
-        this.game.physics.arcade.overlap(this.hero, this.badkeyz, this._onHeroVsBadKey,
+        this.physics.arcade.overlap(this.hero, this.badkeyz, this._onHeroVsBadKey,
             null, this);
         
-        this.game.physics.arcade.overlap(this.hero, this.door, this._onHeroVsDoor,
+        this.physics.arcade.overlap(this.hero, this.door, this._onHeroVsDoor,
             // ignore if there is no key or the player is on air
             function (hero, door) {
                 return this.hasKey === this.keyNum && hero.body.touching.down;
@@ -168,15 +166,15 @@ export default class Play extends Phaser.Scene {
     
     _loadLevel(data) {
         // create all the groups/layers that we need
-        this.bgDecoration = this.game.add.group();
-        this.platforms = this.game.add.group();
-        this.coins = this.game.add.group();
-        this.spiders = this.game.add.group();
-        this.enemyWalls = this.game.add.group();
+        this.bgDecoration = this.add.group();
+        this.platforms = this.add.group();
+        this.coins = this.add.group();
+        this.spiders = this.add.group();
+        this.enemyWalls = this.add.group();
         this.enemyWalls.visible = false;
         
-        this.keyz = this.game.add.group();
-        this.badkeyz = this.game.add.group();
+        this.keyz = this.add.group();
+        this.badkeyz = this.add.group();
     
         // spawn all platforms
         data.platforms.forEach(this._spawnPlatform, this);
@@ -191,57 +189,47 @@ export default class Play extends Phaser.Scene {
         data.badkeyz.forEach(this._spawnBadKey, this);
         // enable gravity
         const GRAVITY = 1200;
-        this.game.physics.arcade.gravity.y = GRAVITY;
+        this.physics.arcade.gravity.y = GRAVITY;
     }
     
-    _spawnPlatform(platform) {
-        let sprite = this.platforms.create(
-            platform.x, platform.y, platform.image);
+    _spawnPlatform(platformData) {
+        let platform = this.platforms.create(platformData.x, platformData.y, platformData.image);
+        platform = this.physics.add.existing(platform)
+        platform.body.setAllowGravity(false);
+        platform.body.setImmovable(true);
+        platform.setOrigin(0,0)
     
-        this.game.physics.enable(sprite);
-        sprite.body.allowGravity = false;
-        sprite.body.immovable = true;
-    
-        this._spawnEnemyWall(platform.x, platform.y, 'left');
-        this._spawnEnemyWall(platform.x + sprite.width, platform.y, 'right');
+        this._spawnEnemyWall(platformData.x - (platform.width / 2), platformData.y - platform.height, 'left');
+        this._spawnEnemyWall(platformData.x + (platform.width / 2), platformData.y - platform.height, 'right');
     }
     
     _spawnEnemyWall(x, y, side) {
-        let sprite = this.enemyWalls.create(x, y, 'invisible-wall');
+        let wall = this.enemyWalls.create(x, y, 'invisible-wall');
         // anchor and y displacement
-        sprite.anchor.set(side === 'left' ? 1 : 0, 1);
         // physic properties
-        this.game.physics.enable(sprite);
-        sprite.body.immovable = true;
-        sprite.body.allowGravity = false;
+        this.physics.add.existing(wall);
+        wall.body.setImmovable(true);
+        wall.body.setAllowGravity(false);
     }
     
     _spawnCharacters(data) {
         // spawn spiders
         data.spiders.forEach(function (spider) {
-            let sprite = new Spider(this.game, spider.x, spider.y);
+            let sprite = new Spider(this, spider.x, spider.y);
             this.spiders.add(sprite);
         }, this);
         // spawn hero
-        this.hero = new Hero(this.game, data.hero.x, data.hero.y);
-        this.game.add.existing(this.hero);
+        this.hero = new Hero(this, data.hero.x, data.hero.y);
     }
     
     _spawnCoin(coin) {
-        let sprite = this.coins.create(coin.x, coin.y, 'coin');
-        sprite.anchor.set(0.5, 0.5);
-    
-        this.game.physics.enable(sprite);
-        sprite.body.allowGravity = false;
-    
-        sprite.animations.add('rotate', [0, 1, 3, 2], 4, true); // 6fps, looped //[0, 1, 2, 1, 0]
-        sprite.animations.play('rotate');
+        this.coins.add(new Coin(this, coin.x, coin.y))
     }
     
     _spawnDoor(x, y) {
         this.door = this.bgDecoration.create(x, y, 'door');
         this.door.anchor.setTo(0.5, 1);
-        this.game.physics.enable(this.door);
+        this.physics.enable(this.door);
         this.door.body.allowGravity = false;
     }
     
@@ -249,13 +237,13 @@ export default class Play extends Phaser.Scene {
         let sprite = this.keyz.create(
             key.x, key.y, 'key', key.frame);
     
-        this.game.physics.enable(sprite);
-        sprite.body.allowGravity = false;
-        sprite.body.immovable = true;
-        sprite.anchor.set(0.5, 0.5);
+        this.scene.add.existing(this);
+        this.scene.physics.add.existing(this);
+        sprite.body.setAllowGravity(false);
+        sprite.body.setImmovable(true);
         // add a small 'up & down' animation via a tween
         this.keyz.y -= 3;
-        this.game.add.tween(this.keyz)
+        this.add.tween(this.keyz)
             .to({y: this.keyz.y + 6}, 800, Phaser.Easing.Sinusoidal.InOut)
             .yoyo(true)
             .loop()
@@ -267,14 +255,15 @@ export default class Play extends Phaser.Scene {
             bkey.x, bkey.y, 'badkey', bkey.frame)
             //bkey.x + Math.floor(Math.random() * 101) , bkey.y + Math.floor(Math.random() * 101), 'key');
     
-        this.game.physics.enable(sprite);
+        this.scene.add.existing(this);
+        this.scene.physics.add.existing(this);
         sprite.body.allowGravity = false;
         sprite.body.immovable = true;
     
         sprite.anchor.set(0.5, 0.5);
      
        this.badkeyz.y -= 3;
-       this.game.add.tween(this.badkeyz)
+       this.add.tween(this.badkeyz)
             .to({y: this.badkeyz.y + 6}, 800, Phaser.Easing.Sinusoidal.InOut)
             .yoyo(true)
             .loop()
@@ -295,7 +284,7 @@ export default class Play extends Phaser.Scene {
         }
         else { // game over -> restart the game
             this.sfx.stomp.play();
-            this.game.state.restart(true, false, {level: this.level});
+            this.state.restart(true, false, {level: this.level});
         }
     }
     
@@ -308,36 +297,36 @@ export default class Play extends Phaser.Scene {
     _onHeroVsBadKey(hero, bkey) {
         this.sfx.stomp.play();
         bkey.kill();
-        this.game.state.restart(true, false, {level: this.level});
+        this.state.restart(true, false, {level: this.level});
     }
     
     _onHeroVsDoor(hero, door) {
         this.sfx.door.play();
         if (this.level === 3) {
-            this.game.state.add('end', EndGameState);
-            this.game.state.start('end', true, false, 'start0');
+            this.state.add('end', EndGameState);
+            this.state.start('end', true, false, 'start0');
         } else {
-            this.game.state.restart(true, false, { level: this.level + 1 });
+            this.state.restart(true, false, { level: this.level + 1 });
         }
     }
     
     _createHud() {
         const NUMBERS_STR = '0123456789X ';
-        this.coinFont = this.game.add.retroFont('font:numbers', 20, 26,
+        this.coinFont = this.add.retroFont('font:numbers', 20, 26,
             NUMBERS_STR, 6);
         
-        let coinIcon = this.game.make.image(0, 59, 'icon:coin');
-        let coinScoreImg = this.game.make.image(coinIcon.x + coinIcon.width,
+        let coinIcon = this.make.image(0, 59, 'icon:coin');
+        let coinScoreImg = this.make.image(coinIcon.x + coinIcon.width,
             coinIcon.y + coinIcon.height / 2, this.coinFont);
         coinScoreImg.anchor.set(0, 0.5);
         
-        this.keyFont = this.game.add.retroFont('font:numbers', 20, 26, NUMBERS_STR, 6);
-        this.keyIcon = this.game.make.sprite(0, 19, 'icon:key');
-        let keyScoreImg = this.game.make.image(this.keyIcon.x + coinIcon.width,
+        this.keyFont = this.add.retroFont('font:numbers', 20, 26, NUMBERS_STR, 6);
+        this.keyIcon = this.make.sprite(0, 19, 'icon:key');
+        let keyScoreImg = this.make.image(this.keyIcon.x + coinIcon.width,
             this.keyIcon.y + this.keyIcon.height / 2, this.keyFont);
             keyScoreImg.anchor.set(0, 0.5);
     
-        this.hud = this.game.add.group();
+        this.hud = this.add.group();
         this.hud.add(coinIcon);
         this.hud.add(coinScoreImg);
         this.hud.add(this.keyIcon);
