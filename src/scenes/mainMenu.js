@@ -5,6 +5,7 @@ export default class MainMenu extends Phaser.Scene {
     constructor() {
         super({ key: "MainMenu" });
     }
+    
     init(data) {
         this.keys = this.input.keyboard.addKeys({
             left: Phaser.Input.Keyboard.KeyCodes.LEFT,
