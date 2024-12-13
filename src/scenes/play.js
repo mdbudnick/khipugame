@@ -1,5 +1,6 @@
 import Coin from "../sprites/coin";
 import Hero from "../sprites/hero";
+import Key from "../sprites/key";
 import Spider from "../sprites/spider";
 export default class Play extends Phaser.Scene {
 
@@ -176,20 +177,37 @@ export default class Play extends Phaser.Scene {
         this.keyz = this.add.group();
         this.badkeyz = this.add.group();
     
+        this._spawnDoor(data.door.x, data.door.y);
         // spawn all platforms
         data.platforms.forEach(this._spawnPlatform, this);
         // spawn hero and enemies
         this._spawnCharacters({hero: data.hero, spiders: data.spiders});
         // spawn important objects
         data.coins.forEach(this._spawnCoin, this);
-        this._spawnDoor(data.door.x, data.door.y);
+        this.physics.add.collider(this.hero, this.platforms);
+        this.physics.add.collider(this.hero, this.coins, this._onHeroVsCoin, null, this);
         //this._spawnKey(data.key.x, data.key.y, data.key.frame);
         data.keyz.forEach(this._spawnKey, this);
-        
+        // add a small 'up & down' animation via a tween for keyz
+        this.tweens.add({
+            targets: this.keyz,
+            y: this.keyz.y + 6,
+            duration: 800,
+            ease: 'Sine.easeInOut', // Phaser 3 uses string identifiers for ease functions
+            yoyo: true,
+            repeat: -1 // use -1 for infinite loop
+        });
+
         data.badkeyz.forEach(this._spawnBadKey, this);
-        // enable gravity
-        const GRAVITY = 1200;
-        this.physics.arcade.gravity.y = GRAVITY;
+        // add a small 'up & down' animation via a tween for badkeyz
+        this.tweens.add({
+            targets: this.badkeyz,
+            y: this.badkeyz.y + 6,
+            duration: 800,
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: -1
+        });
     }
     
     _spawnPlatform(platformData) {
@@ -213,12 +231,9 @@ export default class Play extends Phaser.Scene {
     }
     
     _spawnCharacters(data) {
-        // spawn spiders
         data.spiders.forEach(function (spider) {
-            let sprite = new Spider(this, spider.x, spider.y);
-            this.spiders.add(sprite);
+            this.spiders.add(new Spider(this, spider.x, spider.y));
         }, this);
-        // spawn hero
         this.hero = new Hero(this, data.hero.x, data.hero.y);
     }
     
@@ -228,46 +243,14 @@ export default class Play extends Phaser.Scene {
     
     _spawnDoor(x, y) {
         this.door = this.bgDecoration.create(x, y, 'door');
-        this.door.anchor.setTo(0.5, 1);
-        this.physics.enable(this.door);
-        this.door.body.allowGravity = false;
     }
     
     _spawnKey(key) {
-        let sprite = this.keyz.create(
-            key.x, key.y, 'key', key.frame);
-    
-        this.scene.add.existing(this);
-        this.scene.physics.add.existing(this);
-        sprite.body.setAllowGravity(false);
-        sprite.body.setImmovable(true);
-        // add a small 'up & down' animation via a tween
-        this.keyz.y -= 3;
-        this.add.tween(this.keyz)
-            .to({y: this.keyz.y + 6}, 800, Phaser.Easing.Sinusoidal.InOut)
-            .yoyo(true)
-            .loop()
-            .start();
+        this.keyz.add(new Key(this, key.x, key.y, 'key', key.frame));
     }
     
     _spawnBadKey(bkey) {
-        let sprite = this.badkeyz.create(
-            bkey.x, bkey.y, 'badkey', bkey.frame)
-            //bkey.x + Math.floor(Math.random() * 101) , bkey.y + Math.floor(Math.random() * 101), 'key');
-    
-        this.scene.add.existing(this);
-        this.scene.physics.add.existing(this);
-        sprite.body.allowGravity = false;
-        sprite.body.immovable = true;
-    
-        sprite.anchor.set(0.5, 0.5);
-     
-       this.badkeyz.y -= 3;
-       this.add.tween(this.badkeyz)
-            .to({y: this.badkeyz.y + 6}, 800, Phaser.Easing.Sinusoidal.InOut)
-            .yoyo(true)
-            .loop()
-            .start();
+        this.badkeyz.add(new Key(this, bkey.x, bkey.y, 'badkey', bkey.frame))
     }
     
     _onHeroVsCoin(hero, coin) {
