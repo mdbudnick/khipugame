@@ -10,14 +10,13 @@ export default class Hero extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.anims.create({ key: 'stop', frames: this.anims.generateFrameNumbers('hero', {
-            start: 0,
-            end: 0,
+            frames: [0]
           })})
-            this.anims.create({ key: 'run', defaultTextureKey: 'hero',
-                frames: [
-                { frame: 1, duration: 125 },
-                { frame: 2, duration: 125 },
-                ], frameRate: 8, repeat: -1})
+        this.anims.create({ key: 'run', defaultTextureKey: 'hero',
+            frames: [
+            { frame: 1, duration: 125 },
+            { frame: 2, duration: 125 },
+            ], frameRate: 8, repeat: -1})
           this.anims.create({ key: 'jump', frames: this.anims.generateFrameNumbers('hero', {
             frames: [4]
           })})
@@ -66,7 +65,7 @@ export default class Hero extends Phaser.GameObjects.Sprite {
         // update sprite animation, if it needs changing
         let animationName = this._getAnimationName();
         if (this.anims.getName() !== animationName) {
-            this.anims.play(animationName);
+            this.anims.play(animationName, true);
         }
     }
 
