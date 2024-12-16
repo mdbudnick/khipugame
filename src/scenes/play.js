@@ -76,6 +76,7 @@ export default class Play extends Phaser.Scene {
     
     create() {
         this.keyNum = this.cache.json.get(`level:${this.level}`).keyz.length;
+        this.coinsInLevel = this.cache.json.get(`level:${this.level}`).coins.length;
         
         this.keys = this.input.keyboard.addKeys({
             left: Phaser.Input.Keyboard.KeyCodes.LEFT,
@@ -110,8 +111,7 @@ export default class Play extends Phaser.Scene {
         if (this.hasKeys === this.keyNum) {
             this.door.setFrame(1);
         }
-    
-        this.coinsInLevel = this.cache.json.get(`level:${this.level}`).coins.length;
+
         if (this.coinPickupCount === this.coinsInLevel){
             this._revealClues();
         };   
@@ -228,7 +228,7 @@ export default class Play extends Phaser.Scene {
     }
     
     _spawnCoin(coin) {
-        this.coins.add(new Coin(this, coin.x, coin.y))
+        this.coins.add(new Coin(this, coin.x, coin.y));
     }
     
     _spawnKey(key) {
@@ -236,7 +236,7 @@ export default class Play extends Phaser.Scene {
     }
     
     _spawnBadKey(bkey) {
-        this.badkeyz.add(new Key(this, bkey.x, bkey.y, 'badkey', bkey.frame))
+        this.badkeyz.add(new Key(this, bkey.x, bkey.y, 'badkey', bkey.frame));
     }
     
     _onHeroVsCoin(hero, coin) {
@@ -279,7 +279,7 @@ export default class Play extends Phaser.Scene {
         if (this.level === this.LEVEL_COUNT) {
             this.scene.start('EndGame');
         } else {
-            this.level++
+            this.level++;
             this._restartLevel();
         }
     }
