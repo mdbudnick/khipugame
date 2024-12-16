@@ -120,7 +120,7 @@ export default class Play extends Phaser.Scene {
     }
     
     _revealClues() {	
-        this.badkeyz.destroy();
+        this.badkeyz.children.entries.forEach((k) => { k.destroy() } );
     }
     
     _handleCollisions() {
