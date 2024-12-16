@@ -1,4 +1,5 @@
 import Coin from "../sprites/coin";
+import Door from "../sprites/door";
 import Hero from "../sprites/hero";
 import Key from "../sprites/key";
 import Spider from "../sprites/spider";
@@ -106,7 +107,7 @@ export default class Play extends Phaser.Scene {
         this.keyText.setText(`X${this.hasKeys}`);
     
         if (this.hasKeys === this.keyNum) {
-            this.door.frame = 1;
+            this.door.setFrame(1);
         }
     
         this.coinsInLevel = this.cache.json.get(`level:${this.level}`).coins.length;
@@ -158,17 +159,15 @@ export default class Play extends Phaser.Scene {
     
     _loadLevel(data) {
         // create all the groups/layers that we need
-        this.bgDecoration = this.add.group();
+        this.door = new Door(this, data.door.x, data.door.y);
         this.platforms = this.add.group();
         this.coins = this.add.group();
         this.spiders = this.add.group();
         this.enemyWalls = this.add.group();
-        this.enemyWalls.visible = false;
-        
+        this.enemyWalls.visible = false;    
         this.keyz = this.add.group();
         this.badkeyz = this.add.group();
     
-        this._spawnDoor(data.door.x, data.door.y);
         // spawn all platforms
         data.platforms.forEach(this._spawnPlatform, this);
         // spawn hero and enemies
@@ -230,10 +229,6 @@ export default class Play extends Phaser.Scene {
         this.coins.add(new Coin(this, coin.x, coin.y))
     }
     
-    _spawnDoor(x, y) {
-        this.door = this.bgDecoration.create(x, y, 'door');
-    }
-    
     _spawnKey(key) {
         this.keyz.add(new Key(this, key.x, key.y, 'key', key.frame));
     }
@@ -279,7 +274,7 @@ export default class Play extends Phaser.Scene {
             this.scene.add('end', EndGameState);
             this.scene.start('end', true, false, 'start0');
         } else {
-            this.scene.restart(true, false, { level: this.level });
+            this.scene.restart({ level: this.level });
         }
     }
     
