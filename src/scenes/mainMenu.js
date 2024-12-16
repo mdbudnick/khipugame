@@ -19,7 +19,7 @@ export default class MainMenu extends Phaser.Scene {
         this.load.image('startgame', 'assets/images/startgame.jpg');
         this.load.image('ground', 'assets/images/ground.png');
     
-        this.load.image('grass:6x1', 'assets/images/starttile.png');
+        this.load.image('startTile', 'assets/images/starttile.png');
         
         this.load.image('encuesta', 'assets/images/encuesta.png');    
         this.load.image('instagram', 'assets/images/instagramlogo.png');
