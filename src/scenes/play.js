@@ -91,8 +91,10 @@ export default class Play extends Phaser.Scene {
             door: this.sound.add('sfx:door'),
             bgm: this.sound.add('sfx:bgm')
         };
-        this.sfx.bgm.setLoop(true);
-        this.sfx.bgm.play()
+        if (!this.sfx.bgm.isPlaying) {
+            this.sfx.bgm.setLoop(true);
+            this.sfx.bgm.play()
+        }
         // create level
         this.add.image(480, 300, 'background');
         this._loadLevel(this.cache.json.get(`level:${this.level}`));
