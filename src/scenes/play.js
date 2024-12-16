@@ -253,8 +253,13 @@ export default class Play extends Phaser.Scene {
         }
         else { // game over -> restart the game
             this.sfx.stomp.play();
-            this.scene.restart({ level: this.level });
+            this._restartLevel()
         }
+    }
+
+    _restartLevel() {
+        this.sfx.bgm.stop()
+        this.scene.restart({ level: this.level });
     }
     
     _onHeroVsKey(hero, key) {
@@ -266,16 +271,16 @@ export default class Play extends Phaser.Scene {
     _onHeroVsBadKey(hero, bkey) {
         this.sfx.stomp.play();
         bkey.destroy();
-        this.scene.restart(true, false, {level: this.level});
+        this._restartLevel();
     }
     
     _onHeroVsDoor(hero, door) {
         this.sfx.door.play();
-        this.level++
         if (this.level === this.LEVEL_COUNT) {
             this.scene.start('EndGame');
         } else {
-            this.scene.restart({ level: this.level });
+            this.level++
+            this._restartLevel();
         }
     }
     
