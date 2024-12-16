@@ -14,7 +14,7 @@ export default class Play extends Phaser.Scene {
         this.coinPickupCount = 0;
     
         this.hasKeys = 0;
-        this.level = (data.level || 0);
+        this.level = 1 //(data.level || 0);
     }
     
     preload() {
