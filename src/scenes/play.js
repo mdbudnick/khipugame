@@ -217,6 +217,7 @@ export default class Play extends Phaser.Scene {
         this.physics.add.existing(wall);
         wall.body.setImmovable(true);
         wall.body.setAllowGravity(false);
+        wall.visible = false;
     }
     
     _spawnCharacters(data) {
