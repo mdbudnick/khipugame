@@ -6,7 +6,7 @@ import Spider from "../sprites/spider";
 export default class Play extends Phaser.Scene {
 
     constructor() {
-        super({ key: "play" });
+        super({ key: "Play" });
         this.LEVEL_COUNT = 4;
     }
 
@@ -14,7 +14,7 @@ export default class Play extends Phaser.Scene {
         this.coinPickupCount = 0;
     
         this.hasKeys = 0;
-        this.level = 3 // (data.level || 0);
+        this.level = (data.level || 0);
     }
     
     preload() {
@@ -96,7 +96,6 @@ export default class Play extends Phaser.Scene {
         // create level
         this.add.image(480, 300, 'background');
         this._loadLevel(this.cache.json.get(`level:${this.level}`));
-        this._handleInput();
         this._createHud();
         this._handleCollisions();
     }
@@ -271,8 +270,7 @@ export default class Play extends Phaser.Scene {
         this.sfx.door.play();
         this.level++
         if (this.level === this.LEVEL_COUNT) {
-            this.scene.add('end', EndGameState);
-            this.scene.start('end', true, false, 'start0');
+            this.scene.start('EndGame');
         } else {
             this.scene.restart({ level: this.level });
         }
