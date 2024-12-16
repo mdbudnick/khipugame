@@ -253,7 +253,7 @@ export default class Play extends Phaser.Scene {
         }
         else { // game over -> restart the game
             this.sfx.stomp.play();
-            this.scene.restart(true, false, {level: this.level});
+            this.scene.restart({ level: this.level });
         }
     }
     
