@@ -277,10 +277,10 @@ export default class Play extends Phaser.Scene {
     
     _onHeroVsDoor(hero, door) {
         this.sfx.door.play();
+        this.level++;
         if (this.level === this.LEVEL_COUNT) {
             this.scene.start('EndGame');
         } else {
-            this.level++;
             this._restartLevel();
         }
     }
