@@ -205,8 +205,8 @@ export default class Play extends Phaser.Scene {
         platform.body.setImmovable(true);
         platform.setOrigin(0,0)
     
-        this._spawnEnemyWall(platformData.x - (platform.width / 2), platformData.y - platform.height, 'left');
-        this._spawnEnemyWall(platformData.x + (platform.width / 2), platformData.y - platform.height, 'right');
+        this._spawnEnemyWall(platformData.x - 5, platformData.y - 20, 'left');
+        this._spawnEnemyWall(platformData.x + platform.width + 5, platformData.y - 20, 'right');
     }
     
     _spawnEnemyWall(x, y, side) {
