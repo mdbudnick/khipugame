@@ -10,16 +10,10 @@ export default class Play extends Phaser.Scene {
     }
 
     init(data) {
-        this.keys = this.input.keyboard.addKeys({
-            left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-            right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-            up: Phaser.Input.Keyboard.KeyCodes.UP
-        });
-        
         this.coinPickupCount = 0;
     
-        this.hasKey = 0;
-        this.level = (data.level || 0) % this.LEVEL_COUNT;
+        this.hasKeys = 0;
+        this.level = (data.level || 0);
     }
     
     preload() {
@@ -80,6 +74,13 @@ export default class Play extends Phaser.Scene {
     }
     
     create() {
+        this.keyNum = this.cache.json.get(`level:${this.level}`).keyz.length;
+        
+        this.keys = this.input.keyboard.addKeys({
+            left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+            right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+            up: Phaser.Input.Keyboard.KeyCodes.UP
+        });
         // create sound entities
         this.sfx = {
             jump: this.sound.add('sfx:jump'),
@@ -94,25 +95,21 @@ export default class Play extends Phaser.Scene {
         // create level
         this.add.image(480, 300, 'background');
         this._loadLevel(this.cache.json.get(`level:${this.level}`));
-    
-        // crete hud with scoreboards
+        this._handleInput();
         this._createHud();
+        this._handleCollisions();
     }
     
     update() {
-        this._handleCollisions();
-        this._handleInput();
-        
-        this.coinText.setText(`x${this.coinPickupCount}`);
-        this.keyText.setText(`x${this.hasKey}`);
-        
-        this.keyNum = this.cache.getJSON(`level:${this.level}`).keyz.length;
+        this._handleInput()
+        this.coinText.setText(`X${this.coinPickupCount}`);
+        this.keyText.setText(`X${this.hasKeys}`);
     
-        if (this.hasKey === this.keyNum) {
+        if (this.hasKeys === this.keyNum) {
             this.door.frame = 1;
         }
     
-        this.coinsInLevel = this.cache.getJSON(`level:${this.level}`).coins.length;
+        this.coinsInLevel = this.cache.json.get(`level:${this.level}`).coins.length;
         if (this.coinPickupCount === this.coinsInLevel){
             this._revealClues();
         };   
@@ -127,24 +124,19 @@ export default class Play extends Phaser.Scene {
     }
     
     _handleCollisions() {
-        this.physics.arcade.collide(this.spiders, this.platforms);
-        this.physics.arcade.collide(this.spiders, this.enemyWalls);
-        this.physics.arcade.collide(this.hero, this.platforms);
-    
-        this.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin,
-            null, this);
-        this.physics.arcade.overlap(this.hero, this.spiders,
-            this._onHeroVsEnemy, null, this);
-        this.physics.arcade.overlap(this.hero, this.keyz, this._onHeroVsKey,
-            null, this);
-            
-        this.physics.arcade.overlap(this.hero, this.badkeyz, this._onHeroVsBadKey,
-            null, this);
+        this.physics.add.collider(this.spiders, this.platforms);
+        this.physics.add.collider(this.spiders, this.enemyWalls);
+        this.physics.add.collider(this.hero, this.platforms);
+        this.physics.add.collider(this.hero, this.spiders, this._onHeroVsEnemy, null, this);
+
+        this.physics.add.overlap(this.hero, this.coins, this._onHeroVsCoin, null, this);
+        this.physics.add.overlap(this.hero, this.keyz, this._onHeroVsKey, null, this);
+        this.physics.add.overlap(this.hero, this.badkeyz, this._onHeroVsBadKey, null, this);
         
-        this.physics.arcade.overlap(this.hero, this.door, this._onHeroVsDoor,
+        this.physics.add.collider(this.hero, this.door, this._onHeroVsDoor,
             // ignore if there is no key or the player is on air
             function (hero, door) {
-                return this.hasKey === this.keyNum && hero.body.touching.down;
+                return this.hasKeys === this.keyNum && hero.body.touching.down;
             }, this);
     }
     
@@ -183,8 +175,6 @@ export default class Play extends Phaser.Scene {
         this._spawnCharacters({hero: data.hero, spiders: data.spiders});
         // spawn important objects
         data.coins.forEach(this._spawnCoin, this);
-        this.physics.add.collider(this.hero, this.platforms);
-        this.physics.add.collider(this.hero, this.coins, this._onHeroVsCoin, null, this);
         //this._spawnKey(data.key.x, data.key.y, data.key.frame);
         data.keyz.forEach(this._spawnKey, this);
         // add a small 'up & down' animation via a tween for keyz
@@ -254,12 +244,12 @@ export default class Play extends Phaser.Scene {
     
     _onHeroVsCoin(hero, coin) {
         this.sfx.coin.play();
-        coin.kill();
+        coin.destroy();
         this.coinPickupCount++;
     }
     
     _onHeroVsEnemy(hero, enemy) {
-        if (hero.body.velocity.y > 0) { // kill enemies when hero is falling
+        if (hero.body.velocity.y > 0) { // destroy enemies when hero is falling
             hero.bounce();
             enemy.die();
             this.sfx.stomp.play();
@@ -272,23 +262,24 @@ export default class Play extends Phaser.Scene {
     
     _onHeroVsKey(hero, key) {
         this.sfx.key.play();
-        key.kill();
-        this.hasKey++;
+        key.destroy();
+        this.hasKeys++;
     }
     
     _onHeroVsBadKey(hero, bkey) {
         this.sfx.stomp.play();
-        bkey.kill();
+        bkey.destroy();
         this.state.restart(true, false, {level: this.level});
     }
     
     _onHeroVsDoor(hero, door) {
         this.sfx.door.play();
-        if (this.level === 3) {
+        this.level++
+        if (this.level === this.LEVEL_COUNT) {
             this.state.add('end', EndGameState);
             this.state.start('end', true, false, 'start0');
         } else {
-            this.state.restart(true, false, { level: this.level + 1 });
+            this.state.restart(true, false, { level: this.level });
         }
     }
     

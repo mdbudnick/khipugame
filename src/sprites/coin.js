@@ -10,12 +10,4 @@ export default class Coin extends Phaser.GameObjects.Sprite {
             frames: [0,1,3,2], frameRate: 4, repeat: -1 });
         this.anims.play('rotate');
     }
-
-    preUpdate() {
-        super.preUpdate();
-        this.update();
-    }
-
-    update() {
-    }
 }

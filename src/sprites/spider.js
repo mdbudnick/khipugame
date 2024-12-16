@@ -1,15 +1,26 @@
 export default class Spider extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, "spider")
-        this.anchor.set(0.5);
-
-        this.game.physics.enable(this);
+        scene.add.existing(this);
+        scene.physics.add.existing(this);
         this.body.collideWorldBounds = true;
+        this.body.setAllowGravity(true);
+        this.setOrigin(0, 0);
         this.body.velocity.x = 100;
 
-        this.animations.add('crawl', [0, 1, 2], 8, true); // 8fps, looped
-        this.animations.add('die', [0, 4, 0, 4, 0, 4, 3, 3, 3, 3, 3, 3], 12);
-        this.animations.play('crawl');
+        
+        this.anims.create({ key: 'crawl', frames: this.anims.generateFrameNumbers('spider', {
+            frames: [0,1,2]
+          }), frameRate: 8, repeat: -1});
+        this.anims.create({ key: 'die', frames: this.anims.generateFrameNumbers('spider', {
+            frames: [0, 4, 0, 4, 0, 4, 3, 3, 3, 3, 3, 3]
+          }), frameRate: 12 });
+        this.anims.play('crawl');
+    }
+
+    preUpdate() {
+        super.preUpdate();
+        this.update();
     }
 
     update() {
@@ -24,7 +35,7 @@ export default class Spider extends Phaser.GameObjects.Sprite {
     die() {
         this.body.enable = false;
     
-        this.animations.play('die').onComplete.addOnce(function () {
+        this.anims.play('die').onComplete.addOnce(function () {
             this.kill();
         }, this);
     }

@@ -3,10 +3,9 @@ export default class Hero extends Phaser.GameObjects.Sprite {
         super(scene, x, y, 'hero')
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.body.collideWorldBounds = true;
         this.body.setAllowGravity(true);
-        this.setOrigin(0.5, 0.5);
-        this.body.setCollideWorldBounds = true;
+        this.setOrigin(0, 0);
+        this.body.setCollideWorldBounds(true);
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.anims.create({ key: 'stop', frames: this.anims.generateFrameNumbers('hero', {
@@ -17,12 +16,12 @@ export default class Hero extends Phaser.GameObjects.Sprite {
             { frame: 1, duration: 125 },
             { frame: 2, duration: 125 },
             ], frameRate: 8, repeat: -1})
-          this.anims.create({ key: 'jump', frames: this.anims.generateFrameNumbers('hero', {
+        this.anims.create({ key: 'jump', frames: this.anims.generateFrameNumbers('hero', {
             frames: [4]
-          })})
-          this.anims.create({ key: 'fall', frames: this.anims.generateFrameNumbers('hero', {
-            frames: [3]
-          })})
+        })})
+        this.anims.create({ key: 'fall', frames: this.anims.generateFrameNumbers('hero', {
+        frames: [3]
+        })})
     }
 
     preUpdate() {
