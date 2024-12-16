@@ -120,7 +120,7 @@ export default class Play extends Phaser.Scene {
     }
     
     _revealClues() {	
-        this.badkeyz.children.entries.forEach((k) => { k.destroy() } );
+        this.badkeyz.children.entries.forEach( (k) => { k.destroy() } );
     }
     
     _handleCollisions() {
@@ -256,7 +256,7 @@ export default class Play extends Phaser.Scene {
         }
         else { // game over -> restart the game
             this.sfx.stomp.play();
-            this.state.restart(true, false, {level: this.level});
+            this.scene.restart(true, false, {level: this.level});
         }
     }
     
@@ -269,17 +269,17 @@ export default class Play extends Phaser.Scene {
     _onHeroVsBadKey(hero, bkey) {
         this.sfx.stomp.play();
         bkey.destroy();
-        this.state.restart(true, false, {level: this.level});
+        this.scene.restart(true, false, {level: this.level});
     }
     
     _onHeroVsDoor(hero, door) {
         this.sfx.door.play();
         this.level++
         if (this.level === this.LEVEL_COUNT) {
-            this.state.add('end', EndGameState);
-            this.state.start('end', true, false, 'start0');
+            this.scene.add('end', EndGameState);
+            this.scene.start('end', true, false, 'start0');
         } else {
-            this.state.restart(true, false, { level: this.level });
+            this.scene.restart(true, false, { level: this.level });
         }
     }
     
