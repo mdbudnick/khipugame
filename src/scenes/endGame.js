@@ -4,57 +4,53 @@ export default class EndGame extends Phaser.Scene {
         super({ key: "EndGame" });
     }
 
-    init(data) {
-        this.game.renderer.renderSession.roundPixels = true;
-    
-        this.keys = this.game.input.keyboard.addKeys({
-            left: Phaser.KeyCode.LEFT,
-            right: Phaser.KeyCode.RIGHT,
-            up: Phaser.KeyCode.UP
-        });
-    
-        this.keys.up.onDown.add(function () {
-            let didJump = this.hero.jump();
-            if (didJump) {
-                this.sfx.jump.play();
-            }
-        }, this);
-    }
-
     preload() {
-        this.game.load.json('start0', 'assets/data/start0.json');
-        this.game.load.image('endgame', 'assets/images/endgame.jpg');
-        this.game.load.image('ground', 'assets/images/ground.png');
+        this.load.json('start0', 'assets/data/start0.json');
+        this.load.image('endgame', 'assets/images/endgame.jpg');
+        this.load.image('ground', 'assets/images/ground.png');
         
-        this.game.load.image('button', 'assets/images/encuesta.png');
-        this.game.load.image('button1', 'assets/images/restarttile.png');
+        this.load.image('encuesta', 'assets/images/encuesta.png');
+        this.load.image('restart', 'assets/images/restarttile.png');
         
-        this.game.load.spritesheet('hero', 'assets/images/hero.png', 36, 42);
+        this.load.spritesheet('hero', 'assets/images/hero.png', {
+            frameWidth: 36,
+            frameHeight: 42,
+          });
         
-        this.game.load.audio('sfx:jump', 'assets/audio/jump.wav');
-        this.game.load.audio('sfx:platform', 'assets/audio/coin.wav');
+        this.load.audio('sfx:jump', 'assets/audio/jump.wav');
     }
 
-    openWindow() {
+    _openForm() {
         window.open("https://forms.gle/gW5an78GgXbbZtas9", "_blank")
     }
     
-    restartGame() {
-        this.game.state.start('main', true, false, 'start0');
+    _restartGame() {
+        this.scene.start('MainMenu');
     }
 
     create() {
+        this.keys = this.input.keyboard.addKeys({
+            left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+            right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+            up: Phaser.Input.Keyboard.KeyCodes.UP
+        });
+
         // create sound entities
         this.sfx = {
-            jump: this.game.add.audio('sfx:jump'),
+            jump: this.sound.add('sfx:jump'),
         };
         // create level
-        this.game.add.image(0, 0, 'endgame');
-        this._loadLevel(this.game.cache.getJSON('start0'));
+        this.add.image(480, 300, 'endgame');
     
-        this.game.add.button(450, 240, 'button', openWindow, this);
-        buttonWeb.input.useHandCursor = true;
-        this.game.add.button(400, 340, 'button1', restartGame, this);
+        this.add.image(480, 275, 'encuesta')
+        .setInteractive({ useHandCursor: true })
+        .on('pointerdown', this._openForm)
+
+        this.add.image(480, 350, 'restart')
+        .setInteractive({ useHandCursor: true })
+        .on('pointerdown', this._restartGame, this)
+
+        this.hero = new Hero(this, 20, 520);
     }
 
     update() {
@@ -63,51 +59,24 @@ export default class EndGame extends Phaser.Scene {
     }
 
     _handleCollisions() {
-        this.game.physics.arcade.collide(this.hero, this.platforms);
+        this.physics.add.collider(this.hero, this.platforms);
      };
      
      _handleInput() {
-         if (this.keys.left.isDown) { // move hero left
-             this.hero.move(-1);
-         } else if (this.keys.right.isDown) { // move hero right
-             this.hero.move(1);
-         } else {
-             this.hero.move(0);
-         }
-     };
-     
-     _loadLevel(data) {
-         // create all the groups/layers that we need
-         this.platforms = this.game.add.group();
-         // spawn all platforms
-         data.platforms.forEach(this._spawnPlatform, this);
-         // spawn hero and enemies
-         this._spawnCharacters({hero: data.hero});
-     };
-     
-     _spawnPlatform(platform) {
-         let sprite = this.platforms.create(
-             platform.x, platform.y, platform.image);
-     
-         this.game.physics.enable(sprite);
-         sprite.body.allowGravity = false;
-         sprite.body.immovable = true;
-     };
-     
-     _spawnCoin(coin) {
-         let sprite = this.coin.create(
-             coin.x, coin.y, coin.image);
-     
-         this.game.physics.enable(sprite);
-         sprite.body.allowGravity = false;
-         sprite.body.immovable = true;
-     };
-     
-     _spawnCharacters(data) {
-         // spawn hero
-         this.hero = new Hero(this.game, data.hero.x, data.hero.y);
-         this.game.add.existing(this.hero);
-     };
+        if (Phaser.Input.Keyboard.JustDown(this.keys.up)) {
+            let didJump = this.hero.jump();
+            if (didJump) {
+                this.sfx.jump.play();
+            }
+        }
+        if (this.keys.left.isDown) { // move hero left
+            this.hero.move(-1);
+        } else if (this.keys.right.isDown) { // move hero right
+            this.hero.move(1);
+        } else { // stop
+            this.hero.move(0);
+        }
+    }
      
      shutdown() {};
 }
