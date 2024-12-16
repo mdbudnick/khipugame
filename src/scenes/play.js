@@ -244,7 +244,7 @@ export default class Play extends Phaser.Scene {
     }
     
     _onHeroVsEnemy(hero, enemy) {
-        if (hero.body.velocity.y > 0) { // destroy enemies when hero is falling
+        if (hero.y + 35 < enemy.y) { // destroy enemies when hero is falling from above
             hero.bounce();
             enemy.die();
             this.sfx.stomp.play();

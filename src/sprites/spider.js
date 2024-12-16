@@ -35,10 +35,10 @@ export default class Spider extends Phaser.GameObjects.Sprite {
     }
     
     die() {
-        // this.body.enable = false;
-    
-        this.anims.play('die').onComplete.addOnce(function () {
-            this.kill();
-        }, this);
+        this.body.enable = false;
+        this.anims.play('die');
+        setTimeout(() =>{
+            this.destroy()
+        }, 1000);
     }
 }
