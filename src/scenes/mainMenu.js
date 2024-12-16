@@ -97,7 +97,7 @@ export default class MainMenu extends Phaser.Scene {
         data.platforms.forEach(this._spawnPlatform, this);
         data.coins.forEach(this._spawnCoin, this);
         // spawn hero and enemies
-        this._spawnCharacters({hero: data.hero});
+        this.hero = new Hero(this, data.hero.x, data.hero.y);
         this.physics.add.collider(this.hero, this.platforms);
         this.physics.add.collider(this.hero, this.coins, this._onHeroVsCoin, null, this);
     }
@@ -114,15 +114,11 @@ export default class MainMenu extends Phaser.Scene {
         this.physics.add.existing(coin).body.setAllowGravity(false);
     }
     
-    _spawnCharacters(data) {
-        this.hero = new Hero(this, data.hero.x, data.hero.y);
-    }
-    
     _onHeroVsCoin(_hero, coin) {
         this.sfx.coin.play();
         coin.destroy();
         
-        this.scene.start('play');
+        this.scene.start('Play');
     }
     
     shutdown() {}
