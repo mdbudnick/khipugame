@@ -1,4 +1,5 @@
 import Hero from '../sprites/hero'
+
 export default class EndGame extends Phaser.Scene {
     constructor() {
         super({ key: "EndGame" });

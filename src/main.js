@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import MainMenu from "./scenes/mainMenu";
+import MainMenu from "./scenes/main-menu";
 import Play from "./scenes/play";
-import EndGame from "./scenes/endGame";
+import EndGame from "./scenes/end-game";
 
 const config = {
 	width: 960,

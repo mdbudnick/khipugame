@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "vite --config vite/config.dev.mjs",
-    "build": "vite build --config vite/config.prod.mjs"
+    "build": "vite build --config vite/config.prod.mjs",
+    "build:ghpages": "node build-ghpages.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,8 @@
     "phaser": "^3.87.0"
   },
   "devDependencies": {
+    "fs-extra": "^11.2.0",
+    "rimraf": "^6.0.1",
     "terser": "^5.37.0",
     "vite": "^6.0.3"
   }

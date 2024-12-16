@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import Hero from "../sprites/hero";
-import Play from "./play";
+
 export default class MainMenu extends Phaser.Scene {
     constructor() {
         super({ key: "MainMenu" });
