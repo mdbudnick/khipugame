@@ -3,6 +3,7 @@ import Door from "../sprites/door";
 import Hero from "../sprites/hero";
 import Key from "../sprites/key";
 import Spider from "../sprites/spider";
+
 export default class Play extends Phaser.Scene {
 
     constructor() {
