@@ -3,7 +3,7 @@
     {"image": "ground", "x": 480, "y": 587}
   ],
 	"coins": [
-    {"image": "grass:6x1", "x": 480, "y": 390}
+    {"image": "startTile", "x": 480, "y": 390}
   ],
   "hero": {"x": 21, "y": 500}
 }

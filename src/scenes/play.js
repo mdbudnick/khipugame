@@ -91,8 +91,10 @@ export default class Play extends Phaser.Scene {
             door: this.sound.add('sfx:door'),
             bgm: this.sound.add('sfx:bgm')
         };
-        this.sfx.bgm.setLoop(true);
-        this.sfx.bgm.play()
+        if (!this.sfx.bgm.isPlaying) {
+            this.sfx.bgm.setLoop(true);
+            this.sfx.bgm.play()
+        }
         // create level
         this.add.image(480, 300, 'background');
         this._loadLevel(this.cache.json.get(`level:${this.level}`));
@@ -215,6 +217,7 @@ export default class Play extends Phaser.Scene {
         this.physics.add.existing(wall);
         wall.body.setImmovable(true);
         wall.body.setAllowGravity(false);
+        wall.visible = false;
     }
     
     _spawnCharacters(data) {
@@ -250,8 +253,13 @@ export default class Play extends Phaser.Scene {
         }
         else { // game over -> restart the game
             this.sfx.stomp.play();
-            this.scene.restart(true, false, {level: this.level});
+            this._restartLevel()
         }
+    }
+
+    _restartLevel() {
+        this.sfx.bgm.stop()
+        this.scene.restart({ level: this.level });
     }
     
     _onHeroVsKey(hero, key) {
@@ -263,16 +271,16 @@ export default class Play extends Phaser.Scene {
     _onHeroVsBadKey(hero, bkey) {
         this.sfx.stomp.play();
         bkey.destroy();
-        this.scene.restart(true, false, {level: this.level});
+        this._restartLevel();
     }
     
     _onHeroVsDoor(hero, door) {
         this.sfx.door.play();
-        this.level++
         if (this.level === this.LEVEL_COUNT) {
             this.scene.start('EndGame');
         } else {
-            this.scene.restart({ level: this.level });
+            this.level++
+            this._restartLevel();
         }
     }
     
