@@ -87,15 +87,17 @@ export default class MainMenu extends Phaser.Scene {
             }
         }
         let pointer = this.input.activePointer
-        if (pointer.isDown && pointer.x > this.hero.x) {
-            this.hero.move(1);
-        } else if (pointer.isDown && pointer.x < this.hero.x) {
-            this.hero.move(-1);
-        } else if (this.keys.left.isDown) { // move hero left
+        if (this.keys.left.isDown) { // move hero left
             this.hero.move(-1);
         } else if (this.keys.right.isDown) { // move hero right
             this.hero.move(1);
-        } else if (!pointer.isDown) {
+        } else if (pointer.isDown && pointer.x > this.hero.x + 10) {
+            this.hero.move(1);
+        } else if (pointer.isDown && pointer.x < this.hero.x - 10) {
+            this.hero.move(-1);
+        } else if (!pointer.isDown || 
+            (pointer.x > this.hero.x - 10 && 
+             pointer.x < this.hero.x + 10)) {
             this.hero.move(0);
         }
     }
