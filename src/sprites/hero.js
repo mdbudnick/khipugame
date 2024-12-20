@@ -63,9 +63,7 @@ export default class Hero extends Phaser.GameObjects.Sprite {
         super.update()
         // update sprite animation, if it needs changing
         let animationName = this._getAnimationName();
-        if (this.anims.getName() !== animationName) {
-            this.anims.play(animationName, true);
-        }
+        this.anims.play(animationName, true);
     }
 
     _getAnimationName = function () {
