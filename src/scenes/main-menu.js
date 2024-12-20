@@ -74,17 +74,28 @@ export default class MainMenu extends Phaser.Scene {
     }
     
     _handleInput() {
+        this.input.on('pointerdown', (pointer) => {
+            let didJump = this.hero.jump();
+            if (didJump) {
+                this.sfx.jump.play();
+            }
+        });
         if (Phaser.Input.Keyboard.JustDown(this.keys.up)) {
             let didJump = this.hero.jump();
             if (didJump) {
                 this.sfx.jump.play();
             }
         }
-        if (this.keys.left.isDown) { // move hero left
+        let pointer = this.input.activePointer
+        if (pointer.isDown && pointer.x > this.hero.x) {
+            this.hero.move(1);
+        } else if (pointer.isDown && pointer.x < this.hero.x) {
+            this.hero.move(-1);
+        } else if (this.keys.left.isDown) { // move hero left
             this.hero.move(-1);
         } else if (this.keys.right.isDown) { // move hero right
             this.hero.move(1);
-        } else { // stop
+        } else if (!pointer.isDown) {
             this.hero.move(0);
         }
     }
