@@ -15,7 +15,7 @@ export default class Hero extends Phaser.GameObjects.Sprite {
             frames: [
             { frame: 1, duration: 125 },
             { frame: 2, duration: 125 },
-            ], frameRate: 8, repeat: -1, randomFrame: true})
+            ], frameRate: 8, repeat: -1})
         this.anims.create({ key: 'jump', frames: this.anims.generateFrameNumbers('hero', {
             frames: [4]
         })})
@@ -24,8 +24,8 @@ export default class Hero extends Phaser.GameObjects.Sprite {
         })})
     }
 
-    preUpdate() {
-        super.preUpdate()
+    preUpdate(time, delta) {
+        super.preUpdate(time, delta);
         this.update()
     }
 

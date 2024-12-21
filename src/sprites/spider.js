@@ -16,12 +16,12 @@ export default class Spider extends Phaser.GameObjects.Sprite {
           }), frameRate: 8, repeat: -1});
         this.anims.create({ key: 'die', frames: this.anims.generateFrameNumbers('spider', {
             frames: [0, 4, 0, 4, 0, 4, 3, 3, 3, 3, 3, 3]
-          }), frameRate: 12 });
+          }), frameRate: 8 });
         this.anims.play('crawl');
     }
 
-    preUpdate() {
-        super.preUpdate();
+    preUpdate(time, delta) {
+        super.preUpdate(time, delta);
         this.update();
     }
 

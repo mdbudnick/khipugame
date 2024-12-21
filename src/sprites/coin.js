@@ -7,7 +7,22 @@ export default class Coin extends Phaser.GameObjects.Sprite {
         this.body.setAllowGravity(false);
         
         this.anims.create({ key: 'rotate', defaultTextureKey: 'coin',
-            frames: [0,1,3,2], frameRate: 4, repeat: -1 });
-        this.anims.play('rotate');
+            frames: [
+                { frame: 0 },
+                { frame: 1 },
+                { frame: 3 },
+                { frame: 2 },
+                ], 
+                frameRate: 4, 
+                repeat: -1 });
+    }
+
+    preUpdate(time, delta) {
+        super.preUpdate(time, delta);
+        this.update();
+    }
+
+    update() {
+        this.anims.play('rotate', true);
     }
 }
