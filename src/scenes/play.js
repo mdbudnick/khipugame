@@ -180,10 +180,10 @@ export default class Play extends Phaser.Scene {
         data.keyz.forEach(this._spawnKey, this);
         // add a small 'up & down' animation via a tween for keyz
         this.tweens.add({
-            targets: this.keyz,
-            y: this.keyz.y + 6,
+            targets: this.keyz.getChildren(),
+            y: '+=6',
             duration: 800,
-            ease: 'Sine.easeInOut', // Phaser 3 uses string identifiers for ease functions
+            ease: Phaser.Math.Easing.Sine.InOut,
             yoyo: true,
             repeat: -1 // use -1 for infinite loop
         });
@@ -191,10 +191,10 @@ export default class Play extends Phaser.Scene {
         data.badkeyz.forEach(this._spawnBadKey, this);
         // add a small 'up & down' animation via a tween for badkeyz
         this.tweens.add({
-            targets: this.badkeyz,
-            y: this.badkeyz.y + 6,
+            targets: this.badkeyz.getChildren(),
+            y: '+=6',
             duration: 800,
-            ease: 'Sine.easeInOut',
+            ease: Phaser.Math.Easing.Sine.InOut,
             yoyo: true,
             repeat: -1
         });
